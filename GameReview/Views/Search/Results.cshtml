@@ -1,0 +1,12 @@
+﻿@model IEnumerable<GameReview.Models.Game>
+@{
+    ViewBag.Title = "Results";
+}
+
+<h2>Results</h2>
+
+@foreach (var item in Model)
+{
+    <p>@item.ID : @Html.ActionLink(item.GameTitle, "Details", new { id = item.ID }) -- @item.ReleaseDate </p>
+    
+}
