@@ -172,16 +172,72 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\SearchController.cs" />
+    <Compile Include="Controllers\UserViewModelsController.cs" />
     <Compile Include="DAL\API.cs" />
-    <Compile Include="DAL\GRepo.cs" />
-    <Compile Include="DAL\IGRepo.cs" />
-    <Compile Include="DAL\XMLStorage.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201704051414541_InitialMigration.cs" />
+    <Compile Include="Migrations\201704051414541_InitialMigration.Designer.cs">
+      <DependentUpon>201704051414541_InitialMigration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201704051435061_fixedGameArt.cs" />
+    <Compile Include="Migrations\201704051435061_fixedGameArt.Designer.cs">
+      <DependentUpon>201704051435061_fixedGameArt.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201704051440101_fixedGameArt1.cs" />
+    <Compile Include="Migrations\201704051440101_fixedGameArt1.Designer.cs">
+      <DependentUpon>201704051440101_fixedGameArt1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201704051455576_fixedGameArt2.cs" />
+    <Compile Include="Migrations\201704051455576_fixedGameArt2.Designer.cs">
+      <DependentUpon>201704051455576_fixedGameArt2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201704051457319_fixedGameArt21.cs" />
+    <Compile Include="Migrations\201704051457319_fixedGameArt21.Designer.cs">
+      <DependentUpon>201704051457319_fixedGameArt21.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201704171809081_useridreview.cs" />
+    <Compile Include="Migrations\201704171809081_useridreview.Designer.cs">
+      <DependentUpon>201704171809081_useridreview.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201704171813347_userlibrary.cs" />
+    <Compile Include="Migrations\201704171813347_userlibrary.Designer.cs">
+      <DependentUpon>201704171813347_userlibrary.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201704172025154_isdetailed.cs" />
+    <Compile Include="Migrations\201704172025154_isdetailed.Designer.cs">
+      <DependentUpon>201704172025154_isdetailed.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201704172103366_nulldate.cs" />
+    <Compile Include="Migrations\201704172103366_nulldate.Designer.cs">
+      <DependentUpon>201704172103366_nulldate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201704181600410_Favorites.cs" />
+    <Compile Include="Migrations\201704181600410_Favorites.Designer.cs">
+      <DependentUpon>201704181600410_Favorites.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201704191713045_uservalues.cs" />
+    <Compile Include="Migrations\201704191713045_uservalues.Designer.cs">
+      <DependentUpon>201704191713045_uservalues.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201704191815510_review.cs" />
+    <Compile Include="Migrations\201704191815510_review.Designer.cs">
+      <DependentUpon>201704191815510_review.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201704241728549_apiid.cs" />
+    <Compile Include="Migrations\201704241728549_apiid.Designer.cs">
+      <DependentUpon>201704241728549_apiid.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201704241830257_icollection.cs" />
+    <Compile Include="Migrations\201704241830257_icollection.Designer.cs">
+      <DependentUpon>201704241830257_icollection.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Game.cs" />
     <Compile Include="Models\GameArt.cs" />
+    <Compile Include="Models\GameConfig.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\Review.cs" />
@@ -191,6 +247,7 @@
   <ItemGroup>
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\simple-sidebar.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -198,10 +255,13 @@
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Models\ClassDiagram1.cd" />
+    <Content Include="fonts\glyphicons-halflings-regular.woff2" />
+    <None Include="Properties\PublishProfiles\GameReviewCIT218 - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
@@ -221,8 +281,6 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Home\About.cshtml" />
-    <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Account\_ExternalLoginsListPartial.cshtml" />
     <Content Include="Views\Account\ConfirmEmail.cshtml" />
@@ -245,14 +303,16 @@
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Search\Index.cshtml" />
-    <Content Include="Views\Search\Results.cshtml" />
+    <Content Include="Views\Shared\_Search.cshtml" />
     <Content Include="Views\Games\Create.cshtml" />
     <Content Include="Views\Games\Delete.cshtml" />
     <Content Include="Views\Games\Details.cshtml" />
     <Content Include="Views\Games\Edit.cshtml" />
     <Content Include="Views\Games\Index.cshtml" />
     <Content Include="Views\Search\Details.cshtml" />
-    <Content Include="Views\Search\_gameArt.cshtml" />
+    <Content Include="Views\Account\LoginPartial.cshtml" />
+    <Content Include="Views\UserViewModels\Details.cshtml" />
+    <Content Include="Views\UserViewModels\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -264,6 +324,50 @@
     <Content Include="packages.config" />
     <None Include="Project_Readme.html" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201704051414541_InitialMigration.resx">
+      <DependentUpon>201704051414541_InitialMigration.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704051435061_fixedGameArt.resx">
+      <DependentUpon>201704051435061_fixedGameArt.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704051440101_fixedGameArt1.resx">
+      <DependentUpon>201704051440101_fixedGameArt1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704051455576_fixedGameArt2.resx">
+      <DependentUpon>201704051455576_fixedGameArt2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704051457319_fixedGameArt21.resx">
+      <DependentUpon>201704051457319_fixedGameArt21.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704171809081_useridreview.resx">
+      <DependentUpon>201704171809081_useridreview.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704171813347_userlibrary.resx">
+      <DependentUpon>201704171813347_userlibrary.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704172025154_isdetailed.resx">
+      <DependentUpon>201704172025154_isdetailed.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704172103366_nulldate.resx">
+      <DependentUpon>201704172103366_nulldate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704181600410_Favorites.resx">
+      <DependentUpon>201704181600410_Favorites.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704191713045_uservalues.resx">
+      <DependentUpon>201704191713045_uservalues.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704191815510_review.resx">
+      <DependentUpon>201704191815510_review.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704241728549_apiid.resx">
+      <DependentUpon>201704241728549_apiid.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704241830257_icollection.resx">
+      <DependentUpon>201704241830257_icollection.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

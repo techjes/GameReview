@@ -5,6 +5,7 @@ using System.Web;
 using GameReview.Models;
 using System.Net;
 using System.Xml.Linq;
+using System.Text.RegularExpressions;
 
 namespace GameReview.DAL
 {
@@ -39,15 +40,19 @@ namespace GameReview.DAL
             foreach (var game in games)
             {
                 DateTime time;
+                Game newGame = new Game();
                 DateTime.TryParse(game.Element(XName.Get("ReleaseDate")).Value, out time);
+
+                newGame.ApiID = int.Parse(game.Element(XName.Get("id")).Value);
+                newGame.GameTitle = game.Element(XName.Get("GameTitle")).Value;
+                newGame.Platform = game.Element(XName.Get("Platform")).Value;
+
+                if (time < DateTime.Parse("01/01/1900"))
+                    newGame.ReleaseDate = null;
+                else
+                    newGame.ReleaseDate = time;
                 
-                results.Add(new Game
-                {
-                    ID = int.Parse(game.Element(XName.Get("id")).Value),
-                    GameTitle = game.Element(XName.Get("GameTitle")).Value,
-                    ReleaseDate = time,
-                    Platform = game.Element(XName.Get("Platform")).Value
-                });
+                results.Add(newGame);
             }
             return results;
         }
@@ -79,25 +84,38 @@ namespace GameReview.DAL
             var games = data.Element(XName.Get("Game"));
             DateTime time;
             DateTime.TryParse(games.Element(XName.Get("ReleaseDate")).Value, out time);
+            if (time < DateTime.Parse("01/01/1900"))
+                game.ReleaseDate = null;
+            else                        
+                game.ReleaseDate = time;
+            
 
-            game.ID = int.Parse(games.Element(XName.Get("id")).Value);
+            game.ApiID = int.Parse(games.Element(XName.Get("id")).Value);
             game.Overview = games.Element(XName.Get("Overview")).Value;
             game.ESRB = games.Element(XName.Get("ESRB")).Value;
             game.Genres = GetGenres(games);
             game.Players = int.Parse(games.Element(XName.Get("Players")).Value);
             game.CoOp = games.Element(XName.Get("Co-op")).Value == "No" ? false : true;
-            game.Youtube = games.Element(XName.Get("Youtube")).Value;
+            game.Youtube = GetYoutubeID(games.Element(XName.Get("Youtube")).Value);
             game.Publisher = games.Element(XName.Get("Publisher")).Value;
             game.Rating = double.Parse(games.Element(XName.Get("Rating")).Value);
-            game.FanArt = GetFanArt(games);
-            game.Banner = GetBanners(games);
-            game.BoxArt = GetBoxArt(games);
-            game.Screenshots = GetScreenshots(games);
+            game.ArtCollection = GetFanArt(games);
             game.GameTitle = games.Element(XName.Get("GameTitle")).Value;
-            game.ReleaseDate = time;
             game.Platform = games.Element(XName.Get("Platform")).Value;
 
             return game;
+        }
+
+        private static string GetYoutubeID(string url)
+        {
+            var youtubeMatch = new Regex(@"youtu(?:\.be|be\.com)/(?:.*v(?:/|=)|(?:.*/)?)([a-zA-Z0-9-_]+)").Match(url);
+            var embedURL = "https://www.youtube.com/embed/";
+
+            if (youtubeMatch.Success)            
+                return embedURL + youtubeMatch.Groups[1];
+            
+            else
+                return string.Empty;
         }
 
         private static List<string> GetGenres(XElement doc)
@@ -128,9 +146,14 @@ namespace GameReview.DAL
                     OriginalWidth = int.Parse(original.Attribute(XName.Get("width")).Value),
                     OriginalHeight = int.Parse(original.Attribute(XName.Get("height")).Value),
                     URL = original.Value,
-                    ThumbURL = thumb.Value
+                    ThumbURL = thumb.Value,
+                    Type = GameArt.ArtType.Fan
                 });
             }
+            art.AddRange(GetBoxArt(doc));
+            art.AddRange(GetBanners(doc));
+            art.AddRange(GetScreenshots(doc));
+
             return art;
         }
 
@@ -148,7 +171,8 @@ namespace GameReview.DAL
                     OriginalWidth = int.Parse(item.Attribute(XName.Get("width")).Value),
                     OriginalHeight = int.Parse(item.Attribute(XName.Get("height")).Value),
                     URL = item.Value,
-                    ThumbURL = item.Attribute(XName.Get("thumb")).Value
+                    ThumbURL = item.Attribute(XName.Get("thumb")).Value,
+                    Type = GameArt.ArtType.Box
                 });
             }
             return art;
@@ -168,7 +192,8 @@ namespace GameReview.DAL
                     OriginalWidth = int.Parse(item.Attribute(XName.Get("width")).Value),
                     OriginalHeight = int.Parse(item.Attribute(XName.Get("height")).Value),
                     URL = item.Value,
-                    ThumbURL = null
+                    ThumbURL = null,
+                    Type = GameArt.ArtType.Banner
                 });
             }
             return art;
@@ -190,7 +215,8 @@ namespace GameReview.DAL
                     OriginalWidth = int.Parse(original.Attribute(XName.Get("width")).Value),
                     OriginalHeight = int.Parse(original.Attribute(XName.Get("height")).Value),
                     URL = original.Value,
-                    ThumbURL = thumb.Value
+                    ThumbURL = thumb.Value,
+                    Type = GameArt.ArtType.ScreenShot
                 });
             }
             return art;

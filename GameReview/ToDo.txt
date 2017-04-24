@@ -1,0 +1,2 @@
+﻿Use @Html.RenderAction() to pass your partial views with data. use this for the youtube videos and the images.
+figure out how to get the full url to the game art classes.

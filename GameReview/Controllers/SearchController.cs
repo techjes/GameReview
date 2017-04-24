@@ -9,33 +9,28 @@ namespace GameReview.Controllers
 {
     public class SearchController : Controller
     {
+        private ApplicationDbContext db = new ApplicationDbContext();
 
-        IEnumerable<Game> _games;
-        
-        
         [HttpGet]
         public ActionResult Index()
         {
-            if (Request.QueryString["q"] != null)
+
+            if (Request.QueryString["q"] == null)
             {
-                _games = API.Search(Request.QueryString["q"]);
+                RedirectToAction("Index", "Home");
             }
-            return View(_games);
+            var games = API.Search(Request.QueryString["q"]);
+
+            return View(games);
         }
 
-        
-        public ActionResult Details(int id)
+        protected override void Dispose(bool disposing)
         {
-            
-            Game game = API.GetDetails(id);
-            return View(game);
-        }
-
-        public ActionResult GameArt(int id)
-        {
-            var gameArt = _games.FirstOrDefault(x => x.ID == id).BoxArt;
-            ViewBag.art = gameArt;
-            return PartialView(gameArt);
+            if (disposing)
+            {
+                db.Dispose();
+            }
+            base.Dispose(disposing);
         }
     }
 }

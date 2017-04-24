@@ -4,9 +4,22 @@
 }
 
 <h2>Results</h2>
-
-@foreach (var item in Model)
-{
-    <p>@item.ID : @Html.ActionLink(item.GameTitle, "Details", new { id = item.ID }) -- @item.ReleaseDate </p>
-
-}
+<table class="table">
+    <thead>
+        <tr>
+            <th>@Html.DisplayNameFor(x => x.GameTitle)</th>
+            <th>@Html.DisplayNameFor(x => x.Platform)</th>
+            <th>@Html.DisplayNameFor(x => x.ReleaseDate)</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@Html.ActionLink(item.GameTitle, "Details", "Games", new { id = item.ApiID }, new { })</td>
+                <td>@item.Platform</td>
+                <td>@item.ReleaseDate</td>
+            </tr>
+        }
+    </tbody>
+</table>

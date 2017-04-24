@@ -21,8 +21,6 @@ namespace GameReview
         }
         protected void Session_Start()
         {
-            
-            Session["Games"] = XMLStorage.Read();
-        }
+                    }
     }
 }

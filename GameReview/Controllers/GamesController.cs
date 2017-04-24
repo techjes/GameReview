@@ -7,6 +7,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using GameReview.Models;
+using GameReview.DAL;
 
 namespace GameReview.Controllers
 {
@@ -21,17 +22,18 @@ namespace GameReview.Controllers
         }
 
         // GET: Games/Details/5
-        public ActionResult Details(int? id)
+        public ActionResult Details(int id)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Game game = db.Games.Find(id);
+            Game game = db.Games.FirstOrDefault(x => x.ApiID == id);
+
             if (game == null)
             {
-                return HttpNotFound();
+                game = API.GetDetails(id);
+                db.Games.Add(game);
+                db.SaveChanges();
             }
+            else
+                db.Entry(game).Collection(x => x.ArtCollection).Load();
             return View(game);
         }
 

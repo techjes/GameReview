@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GameReview.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -10,7 +11,17 @@ namespace GameReview.Controllers
     {
         public ActionResult Index()
         {
-            return View();
+            if (!User.Identity.IsAuthenticated)
+                return RedirectToAction("Login", "Account");
+            UserViewModel model;
+            ApplicationUser user;
+            using (ApplicationDbContext db = new ApplicationDbContext())
+            {
+                user = db.Users.First(x => x.UserName == User.Identity.Name);
+                ViewBag.FavoritesCount = user.Favorites.Count();
+                model = new UserViewModel(user);
+            }
+            return View(model);
         }
 
         public ActionResult About()

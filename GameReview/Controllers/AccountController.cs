@@ -9,6 +9,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using GameReview.Models;
+using System.Net;
 
 namespace GameReview.Controllers
 {
@@ -90,6 +91,8 @@ namespace GameReview.Controllers
                     return View(model);
             }
         }
+
+        
 
         //
         // GET: /Account/VerifyCode
