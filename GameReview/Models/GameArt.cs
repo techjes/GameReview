@@ -1,5 +1,5 @@
 using System;
-
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace GameReview.Models
 {
@@ -19,5 +19,9 @@ namespace GameReview.Models
         public string URL { get; set; }
         public string ThumbURL { get; set; }
         public ArtType Type { get; set; }
+        [NotMapped]
+        public string FullURL => "http://thegamesdb.net/banners/" + URL;
+        [NotMapped]
+        public string FullThumb => "http://thegamesdb.net/banners/" + ThumbURL;
     }
 }

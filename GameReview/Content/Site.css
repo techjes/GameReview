@@ -23,6 +23,34 @@ textarea {
     max-width: 280px;
 }
 
-div #jumbotron-home{
-    background-color: rgba(0,0,0,1) 
+div #jumbotron-home {
+    background-color: rgba(0,0,0,1)
 }
+
+.gallery {
+    display: inline-block;
+    margin-top: 20px;
+}
+
+#edit-icon {
+    display: none;
+    position: absolute;
+    left: 95%;
+}
+
+.icon-hover:hover #edit-icon {
+    display: block;
+}
+
+.search-form {
+    margin-left: 10px !important;
+}
+
+    .search-form input[type="text"] {
+        max-width: none !important;
+        width: 500px !important;
+        margin-right: 0 !important;
+    }
+    .search-form input[type="button"] {
+        margin-left: 0 !important;
+    }

@@ -19,6 +19,8 @@ namespace GameReview.Models
         [Display(Name = "Member Since")]
         [DisplayFormat(DataFormatString = "{0:dd MMM yyyy}")]
         public System.DateTime? AccountCreationDate { get; set; }
+        public virtual IList<Review> Reviews { get; set; }
+
 
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
         {
@@ -42,6 +44,8 @@ namespace GameReview.Models
         }
 
         public System.Data.Entity.DbSet<GameReview.Models.Game> Games { get; set; }
+
+        public System.Data.Entity.DbSet<GameReview.Models.Review> Reviews { get; set; }
 
     }
 }

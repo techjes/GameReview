@@ -1,0 +1,14 @@
+﻿<div id="favoritesButton">
+    @using (Ajax.BeginForm("ManageFavorite", "Games", new AjaxOptions { UpdateTargetId = "favoritesButton", HttpMethod = "Post" }))
+    {
+        <input type="hidden" name="id" value="@ViewBag.GameId" />
+        if (ViewBag.InFavorites)
+        {
+            <input type="submit" name="submit" value="Remove from Favorites" class="btn btn-success" />
+        }
+        else
+        {
+            <input type="submit" name="submit" value="Add to Favorites" class="btn btn-success" />
+        }
+    }
+</div>

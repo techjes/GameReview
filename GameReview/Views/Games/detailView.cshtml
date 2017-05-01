@@ -1,0 +1,36 @@
+﻿@model GameReview.Models.Game
+
+@{
+    ViewBag.Title = "Details";
+}
+
+
+<div class="row">
+    <div class="col-md-6  col-md-offset-2">
+        <h2>@Html.DisplayNameFor(model => model.Overview)</h2>
+        <p>
+            @Html.DisplayFor(model => model.Overview)
+        </p>
+    </div>
+    <div class="col-md-4">
+        <h2>Details</h2>
+        <dl class="dl-horizontal">
+            <dt>@Html.DisplayNameFor(model => model.ReleaseDate)</dt>
+            <dd>@Html.DisplayFor(model => model.ReleaseDate)</dd>
+            <dt>@Html.DisplayNameFor(model => model.ESRB)</dt>
+            <dd>@Html.DisplayFor(model => model.ESRB)</dd>
+            <dt>@Html.DisplayNameFor(model => model.Players)</dt>
+            <dd>@Html.DisplayFor(model => model.Players)</dd>
+            <dt>@Html.DisplayNameFor(model => model.CoOp)</dt>
+            <dd>@Html.DisplayFor(model => model.CoOp)</dd>
+            <dt>@Html.DisplayNameFor(model => model.Publisher)</dt>
+            <dd>@Html.DisplayFor(model => model.Publisher)</dd>
+            <dt>@Html.DisplayNameFor(model => model.Rating)</dt>
+            <dd>@Html.DisplayFor(model => model.Rating)</dd>
+        </dl>
+    </div>
+</div>
+
+
+
+

@@ -9,7 +9,38 @@
         <li>
             @Html.ActionLink("Hello " + User.Identity.GetUserName() + "!", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })
         </li>
-        <li><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
+        @if (User.IsInRole("Administrator"))
+        {
+            <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button">
+                    Admin Functions<span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu">
+                    <li>@Html.ActionLink("Users", "Index", "Account")</li>
+                    <li>@Html.ActionLink("Roles", "Index", "IdentityRole")</li>
+                </ul>
+            </li>
+            <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button">
+                    Moderator Functions<span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu">
+                    <li>@Html.ActionLink("Reviews", "Index", "Moderator")</li>
+                </ul>
+            </li>
+        }
+        else if (User.IsInRole("Moderator"))
+        {
+            <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button">
+                    Moderator Functions<span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu">
+                    <li>@Html.ActionLink("Reviews", "Index", "Moderator")</li>
+                </ul>
+            </li>
+        }
+        <li><a href="javascript:document.getElementById('logoutForm').submit()" style="margin-right:5px">Log off</a></li>
     </ul>
     }
 }

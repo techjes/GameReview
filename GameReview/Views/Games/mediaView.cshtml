@@ -1,0 +1,32 @@
+﻿@model GameReview.Models.Game
+
+@{
+    ViewBag.Title = "mediaView";
+}
+
+<h2>Media</h2>
+
+<div class="row">
+    <div class="list-group gallery">
+        @foreach (var item in Model.ArtCollection)
+        {
+            if (item.Type != GameReview.Models.GameArt.ArtType.Banner)
+            {
+            <div class="col-md-3">
+                <a class="thumbnail fancybox" rel="gameImages" href="@item.FullURL">
+                    <img class="img-responsive" src="@item.FullThumb" alt="Alternate Text" />
+                </a>
+            </div>
+            }
+        }
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        $(".fancybox").fancybox();
+    });
+</script>
+
+
+
+

@@ -31,10 +31,31 @@ namespace GameReview.Controllers
                 game = API.GetDetails(id);
                 db.Games.Add(game);
                 db.SaveChanges();
-            }
-            else
-                db.Entry(game).Collection(x => x.ArtCollection).Load();
+            }         
+            db.Entry(game).Collection(x => x.ArtCollection).Load();
+            db.Entry(game).Collection(x => x.Reviews).Load();
+            
+
             return View(game);
+        }
+
+        public ActionResult DetailSubView(int id, string viewLink)
+        {
+            var game = db.Games.Find(id);
+
+            switch (viewLink)
+            {
+                case "detailView":
+                    return PartialView("detailView", game);
+                case "trailerView":
+                    return PartialView("trailerView", game);
+                case "mediaView":
+                    return PartialView("mediaView", game);
+                case "reviewsView":
+                    return RedirectToAction("IndexByGame", "Reviews", new { id = id });
+                default:
+                    return PartialView("detailView", game);
+            }
         }
 
         // GET: Games/Create
@@ -115,6 +136,38 @@ namespace GameReview.Controllers
             db.Games.Remove(game);
             db.SaveChanges();
             return RedirectToAction("Index");
+        }
+
+        public ActionResult FavoriteButton(int id)
+        {
+            var game = db.Games.Find(id);
+            var user = db.Users.First(x => x.UserName == User.Identity.Name);
+            db.Entry(user).Collection(x => x.Favorites).Load();
+
+            bool inFavorites = user.Favorites.Contains(game);
+            ViewBag.InFavorites = inFavorites;
+            ViewBag.GameId = id;
+            return PartialView();
+        }
+
+        [HttpPost]
+        public ActionResult ManageFavorite(int id)
+        {
+            var game = db.Games.Find(id);
+            var user = db.Users.First(x => x.UserName == User.Identity.Name);
+            db.Entry(user).Collection(x => x.Favorites).Load();
+
+            bool inFavorites;
+
+            if (user.Favorites.Contains(game))           
+                user.Favorites.Remove(game);          
+            else
+                user.Favorites.Add(game);
+            db.Entry(user).State = EntityState.Modified;
+            db.SaveChanges();
+
+            return RedirectToAction("FavoriteButton", new { id = id });
+
         }
 
         protected override void Dispose(bool disposing)

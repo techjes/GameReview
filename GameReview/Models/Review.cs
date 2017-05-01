@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,7 +21,6 @@ namespace GameReview.Models
         public bool Recommended { get; set; }
         public int HelpfulCount { get; set; }
         public int NotHelpfulCount { get; set; }
-        [Required]
-        public int UserName { get; set; }
+        public string UserName { get; set; }
     }
 }

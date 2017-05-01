@@ -13,29 +13,36 @@ namespace GameReview.Controllers
         {
             if (!User.Identity.IsAuthenticated)
                 return RedirectToAction("Login", "Account");
-            UserViewModel model;
             ApplicationUser user;
+
             using (ApplicationDbContext db = new ApplicationDbContext())
             {
                 user = db.Users.First(x => x.UserName == User.Identity.Name);
                 ViewBag.FavoritesCount = user.Favorites.Count();
-                model = new UserViewModel(user);
+                db.Entry(user).Collection(x => x.Reviews).Load();
+                db.Entry(user).Collection(x => x.Favorites).Load();
             }
-            return View(model);
+            user.Reviews.OrderBy(x => x.DateCreated);
+            user.Favorites.OrderBy(x => x.GameTitle);          
+
+            return View(user);
         }
 
-        public ActionResult About()
+        public ActionResult ReviewsByUser()
         {
-            ViewBag.Message = "Your application description page.";
+            if (!User.Identity.IsAuthenticated)
+                return RedirectToAction("Login", "Account");
+            ApplicationUser user;
 
-            return View();
-        }
+            using (ApplicationDbContext db = new ApplicationDbContext())
+            {
+                user = db.Users.First(x => x.UserName == User.Identity.Name);
+                ViewBag.FavoritesCount = user.Favorites.Count();
+                db.Entry(user).Collection(x => x.Reviews).Load();
+            }
 
-        public ActionResult Contact()
-        {
-            ViewBag.Message = "Your contact page.";
 
-            return View();
+            return View(user);
         }
     }
 }

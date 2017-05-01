@@ -8,7 +8,10 @@
     <title>@ViewBag.Title - Game Lib</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
-
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/fancybox")
+    @RenderSection("scripts", required: false)
 </head>
 <body>
     <div id="wrapper">
@@ -18,13 +21,14 @@
                 <div class="container-fluid">
                     <div class="navbar-header">
                         <a href="#menu-toggle" class="btn btn-sm btn-default navbar-btn" id="menu-toggle">Menu</a>
-                        Insert User Short Info, ie number of favorites, number of reviews
                     </div>
-                    <div class="navbar-collapse collapse">
-                        <ul class="nav navbar-nav"></ul>
+                        <form action="@Url.Action("Index", "Search")" method="get" class="navbar-left search-form">
+                            <input type="text" name="q" value="" class="input-sm"/>
+                            <input type="submit" value="Submit" class="navbar-btn btn btn-sm" />
+                        </form>
 
-                    </div>
-
+                        @{Html.RenderPartial("_LoginPartial");}
+                   
                 </div>
             </div>
         <div id="sidebar-wrapper">
@@ -47,9 +51,7 @@
             </div>
         </div>
     </div>
-    @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/bootstrap")
-    @RenderSection("scripts", required: false)
+ 
 
     @*Menu Toggle Script*@
     <script>

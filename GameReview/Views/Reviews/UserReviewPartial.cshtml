@@ -1,0 +1,53 @@
+﻿@model GameReview.Models.Review
+<div id="userReviewArea" class="col-md-6 col-md-offset-3">
+    @if (Model != null)
+    {
+        <h2>Your Review</h2>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title navbar-header">@Model.UserName</h3>
+                <h3 class="panel-title text-right">@Model.DateCreated</h3>
+            </div>
+            <div class="panel-body">
+                @Model.Content
+            </div>
+            <div class="panel-footer">
+                Was this review Helpful?
+                <button type="button" class="btn btn-default">
+                    <span class="glyphicon glyphicon-thumbs-up"></span> @Model.HelpfulCount
+                </button>
+                <button type="button" class="btn btn-default">
+                    <span class="glyphicon glyphicon-thumbs-up"></span> @Model.NotHelpfulCount
+                </button>
+                <button type="button" class="btn btn-default pull-right"><span class="glyphicon glyphicon-edit"></span></button>
+            </div>
+        </div>
+    }
+    else
+    {
+        using (Ajax.BeginForm("Create", "Reviews", new AjaxOptions() { UpdateTargetId = "userReviewArea", HttpMethod = "Post" }))
+        {
+            @Html.AntiForgeryToken()
+            <input type="hidden" name="GameID" value="@ViewBag.GameID" readonly />
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">@User.Identity.Name</h3>
+                    <h3 class="panel-title text-right">@DateTime.Now</h3>
+                </div>
+                <div class="panel-body">
+                    @Html.TextArea("Content")
+                </div>
+                <div class="panel-footer">
+                    Do you recommend this game?
+                    <div class="checkbox">
+                        @Html.EditorFor(model => model.Recommended)
+                        @Html.ValidationMessageFor(model => model.Recommended, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <input type="submit" name="Submit" value="Submit" class="btn btn-default" />
+            </div>
+        }
+    }
+    <hr />
+
+</div>

@@ -10,6 +10,9 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using GameReview.Models;
 using System.Net;
+using System.Collections.Generic;
+using Microsoft.AspNet.Identity.EntityFramework;
+using GameReview.CustomAttributes;
 
 namespace GameReview.Controllers
 {
@@ -21,6 +24,140 @@ namespace GameReview.Controllers
 
         public AccountController()
         {
+        }
+        [AuthorizeOrRedirectAttribute(Roles = "Administrator")]
+        public ActionResult Index()
+        {
+            var db = new ApplicationDbContext();
+            var users = db.Users;
+            var model = new List<UserViewModel>();
+
+            foreach (var user in users)
+            {
+                model.Add(new UserViewModel(user));
+            }
+
+            return View(model);
+
+        }
+
+        [AuthorizeOrRedirectAttribute(Roles = "Administrator")]
+        public ActionResult Details(string userName = null)
+        {
+            var db = new ApplicationDbContext();
+            var user = db.Users.First(x => x.UserName == userName);
+            var model = new UserViewModel(user);
+
+            if (user == null)
+                return HttpNotFound();
+
+            return View(model);
+        }
+
+        [HttpGet]
+        [AuthorizeOrRedirectAttribute(Roles = "Administrator")]
+        public ActionResult Create()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [AuthorizeOrRedirectAttribute(Roles = "Administrator")]
+        public async Task<ActionResult> Create(RegisterViewModel user)
+        {
+            var db = new ApplicationDbContext();
+
+            if (ModelState.IsValid)
+            {
+                var newUser = new ApplicationUser();
+
+                newUser.UserName = user.UserName;
+                newUser.Email = user.Email;
+                newUser.FirstName = user.FirstName;
+                newUser.LastName = user.LastName;
+                newUser.AccountCreationDate = DateTime.Now;
+
+                var result = await UserManager.CreateAsync(newUser, user.Password);
+                if (result.Succeeded)
+                {
+                    UserManager.AddToRole(newUser.Id, "User");
+                    return RedirectToAction("Index");
+                }
+                AddErrors(result);
+            }
+            return View(User);
+        }
+
+        [HttpGet]
+        [AuthorizeOrRedirectAttribute(Roles = "Administrator")]
+        public ActionResult Edit(string userName = null)
+        {
+            if (userName == null)
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+
+            var db = new ApplicationDbContext();
+            var user = db.Users.First(x => x.UserName == userName);
+            var model = new UserViewModel(user);
+
+            if (user == null)
+                return HttpNotFound();
+
+            return View(model);
+            
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [AuthorizeOrRedirectAttribute(Roles = "Administrator")]
+        public ActionResult Edit([Bind(Include = "UserName,Email,FirstName,LastName,AccountCreationDate,Password,ConfirmPassword")]UserViewModel userModel)
+        {
+            if(ModelState.IsValid)
+            {
+                var db = new ApplicationDbContext();
+                var user = db.Users.First(x => x.UserName == userModel.UserName);
+
+                user.Email = userModel.Email;
+                user.FirstName = userModel.FirstName;
+                user.LastName = userModel.LastName;
+                user.AccountCreationDate = userModel.AccountCreationDate;
+
+                var ph = new PasswordHasher();
+                user.PasswordHash = ph.HashPassword(userModel.Password);
+
+                db.Entry(user).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+
+                return RedirectToAction("Index");
+            }
+            
+
+            return View(userModel);
+        }
+
+        [AuthorizeOrRedirectAttribute(Roles = "Administrator")]
+        public ActionResult Delete(string userName = null)
+        {
+            var db = new ApplicationDbContext();
+            var user = db.Users.First(x => x.UserName == userName);
+            var model = new UserViewModel(user);
+
+            if (user == null)
+                return HttpNotFound();
+
+            return View(model);
+        }
+        [ValidateAntiForgeryToken]
+        [HttpPost, ActionName("Delete")]
+        [AuthorizeOrRedirectAttribute(Roles = "Administrator")]
+        public ActionResult ConfirmDelete(string userName = null)
+        {
+            var db = new ApplicationDbContext();
+            var user = db.Users.First(x => x.UserName == userName);
+            db.Users.Remove(user);
+            db.SaveChanges();
+
+            return RedirectToAction("Index");
         }
 
         public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager )
@@ -159,12 +296,13 @@ namespace GameReview.Controllers
                 if (result.Succeeded)
                 {
                     await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
-                    
+
                     // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
                     // Send an email with this link
                     // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
                     // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
                     // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
+                    UserManager.AddToRole(user.Id, "User");
 
                     return RedirectToAction("Index", "Home");
                 }
@@ -405,6 +543,150 @@ namespace GameReview.Controllers
         {
             return View();
         }
+
+        public ActionResult ViewUsersRoles(string userName = null)
+        {
+            if (!string.IsNullOrWhiteSpace(userName))
+            {
+                List<string> userRoles;
+
+                using (var context = new ApplicationDbContext())
+                {
+                    var roleStore = new RoleStore<IdentityRole>(context);
+                    var roleManager = new RoleManager<IdentityRole>(roleStore);
+
+                    var userStore = new UserStore<ApplicationUser>(context);
+                    var userManager = new UserManager<ApplicationUser>(userStore);
+
+                    var user = UserManager.FindByName(userName);
+                    if (user == null)
+                        throw new Exception("User not found!");
+
+                    var userRoleIds = user.Roles.Select(x => x.RoleId);
+                    userRoles = (from id in userRoleIds
+                                 let r = roleManager.FindById(id)
+                                 select r.Name).ToList();
+                }
+
+                ViewBag.UserName = userName;
+                ViewBag.RolesForUser = userRoles;
+            }
+            return View();
+        }
+
+        public ActionResult DeleteRoleForUser(string userName = null, string roleName = null)
+        {
+            if (!string.IsNullOrWhiteSpace(userName) || !string.IsNullOrWhiteSpace(roleName))
+            {
+                List<string> userRoles;
+
+                using (var context = new ApplicationDbContext())
+                {
+                    var roleStore = new RoleStore<IdentityRole>(context);
+                    var roleManager = new RoleManager<IdentityRole>(roleStore);
+
+                    var userStore = new UserStore<ApplicationUser>(context);
+                    var userManager = new UserManager<ApplicationUser>(userStore);
+
+                    var user = UserManager.FindByName(userName);
+                    if (user == null)
+                        throw new Exception("User not found!");
+
+                    if (UserManager.IsInRole(user.Id, roleName))
+                    {
+                        UserManager.RemoveFromRole(user.Id, roleName);
+                        context.SaveChanges();
+                    }
+
+                    var userRoleIds = user.Roles.Select(x => x.RoleId);
+                    userRoles = (from id in userRoleIds
+                                 let r = roleManager.FindById(id)
+                                 select r.Name).ToList();
+                }
+
+                ViewBag.UserName = userName;
+                ViewBag.RolesForUser = userRoles;
+
+                return View("ViewUsersRoles");
+            }
+            else
+                return View("Index");
+            
+        }
+
+        [HttpGet]
+        public ActionResult AddRoleToUser(string userName = null)
+        {
+            List<string> roles;
+
+            using (var context = new ApplicationDbContext())
+            {
+                var roleStore = new RoleStore<IdentityRole>(context);
+                var roleManager = new RoleManager<IdentityRole>(roleStore);
+
+                roles = roleManager.Roles.Select(x => x.Name).ToList();
+            }
+
+            ViewBag.Roles = new SelectList(roles);
+            ViewBag.UserName = userName;
+
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult AddRoleToUser(string roleName, string userName)
+        {
+            List<string> roles;
+
+            using (var context = new ApplicationDbContext())
+            {
+                var roleStore = new RoleStore<IdentityRole>(context);
+                var roleManager = new RoleManager<IdentityRole>(roleStore);
+
+                var userStore = new UserStore<ApplicationUser>(context);
+                var userManager = new UserManager<ApplicationUser>(userStore);
+
+                var user = UserManager.FindByName(userName);
+                if (user == null)
+                    throw new Exception("User not found!");
+                var role = roleManager.FindByName(roleName);
+                if (role == null)
+                    throw new Exception("Role not found!");
+
+                if (UserManager.IsInRole(user.Id, role.Name))
+                {
+                    ViewBag.ErrorMessage = "This user already has the role specified!";
+
+                    roles = roleManager.Roles.Select(x => x.Name).ToList();
+                    ViewBag.Roles = new SelectList(roles);
+                    ViewBag.UserName = userName;
+
+                    return View();
+
+                }
+                else
+                {
+                    userManager.AddToRole(user.Id, role.Name);
+                    context.SaveChanges();
+
+                    return RedirectToAction("ViewUsersRoles", new { userName = userName });
+                    //List<string> userRoles;
+                    //var userRoleIds = user.Roles.Select(x => x.RoleId);
+                    //userRoles = (from id in userRoleIds
+                    //             let r = roleManager.FindById(id)
+                    //             select r.Name).ToList();
+
+                    //ViewBag.UserName = userName;
+                    //ViewBag.RolesForUser = userRoles;
+                    //return View("ViewUsersRoles");
+
+                }
+
+                
+            }
+        }
+
 
         protected override void Dispose(bool disposing)
         {
