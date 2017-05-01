@@ -1,4 +1,4 @@
-﻿@model GameReview.Models.ApplicationUser
+﻿@model GameReview.Models.UserViewModel
 
 @{
     ViewBag.Title = "Home Page";
@@ -10,66 +10,75 @@
 </div>
 
 <div class="row">
-    <div class="col-md-4 col-md-offset-1 well">
-        <h2>Most Recent Review</h2>
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <h3 class="panel-title">@Html.DisplayFor(modelItem => Model.Reviews[0].UserName)</h3>
-                <h3 class="panel-title text-right">@Html.DisplayFor(modelItem => Model.Reviews[0].DateCreated)</h3>
-            </div>
-            <div class="panel-body">
-                @Html.DisplayFor(modelItem => Model.Reviews[0].Content)
-            </div>
-            <div class="panel-footer">
-                Was this review Helpful?
-                <button type="button" class="btn btn-default">
-                    <span class="glyphicon glyphicon-thumbs-up"></span>@Model.Reviews[0].HelpfulCount
-                </button>
-                <button type="button" class="btn btn-default">
-                    <span class="glyphicon glyphicon-thumbs-up"></span>@Model.Reviews[0].NotHelpfulCount
-                </button>
-                @Html.ActionLink("View All", "ReviewsByUser", null, new { @class="btn btn-default pull-right"})
+    @if (ViewBag.Reviews != null)
+    {
+        <div class="col-md-4 col-md-offset-1 well">
+            <h2>Most Recent Review</h2>
+
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">@ViewBag.Reviews.UserName</h3>
+                    <h3 class="panel-title text-right">@ViewBag.Reviews.DateCreated</h3>
+                </div>
+                <div class="panel-body">
+                    @ViewBag.Reviews.Content
+                </div>
+                <div class="panel-footer">
+                    Was this review Helpful?
+                    <button type="button" class="btn btn-default">
+                        <span class="glyphicon glyphicon-thumbs-up"></span>@ViewBag.Reviews.HelpfulCount
+                    </button>
+                    <button type="button" class="btn btn-default">
+                        <span class="glyphicon glyphicon-thumbs-up"></span>@ViewBag.Reviews.NotHelpfulCount
+                    </button>
+                    @Html.ActionLink("View All", "ReviewsByUser", null, new { @class = "btn btn-default pull-right" })
+                </div>
+
             </div>
         </div>
-    </div>
-    <div class="col-md-4 col-md-offset-1 well">
-        <h2>Top Favorites</h2>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>
-                        Game Title
-                    </th>
-                    <th>
-                        Platform
-                    </th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                @{
-                    int i = 0;
-                    foreach (var item in Model.Favorites)
-                    {
-                        if(i == 4)
+    }
+    @if (ViewBag.Favorites != null)
+    {
+        <div class="col-md-4 col-md-offset-1 well">
+            <h2>Top Favorites</h2>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>
+                            Game Title
+                        </th>
+                        <th>
+                            Platform
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        int i = 0;
+                        foreach (var item in ViewBag.Favorites)
                         {
-                            break;
+                            if (i == 4)
+                            {
+                                break;
+                            }
+                            <tr>
+                                <td>
+                                    @item.GameTitle
+                                </td>
+                                <td>
+                                    @item.Platform
+                                </td>
+                                <td>
+                                    @Html.ActionLink("Game Page", "Details", "Games", new { id = item.ApiID }, null)
+                                </td>
+                            </tr>
+                            i++;
                         }
-                        <tr>
-                            <td>
-                                @Html.DisplayFor(x => item.GameTitle)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(x => item.Platform)
-                            </td>
-                            <td>
-                                @Html.ActionLink("Game Page", "Details", "Games", new { id = item.ApiID}, null)
-                            </td>
-                        </tr>
-                        i++;
                     }
-                }
-            </tbody>
-        </table>
-    </div>
+                </tbody>
+            </table>
+        </div>
+                        }
+
 </div>

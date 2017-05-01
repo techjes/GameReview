@@ -18,6 +18,7 @@ namespace GameReview.Models
         public string LastName { get; set; }
         [Display(Name = "Member Since")]
         [DisplayFormat(DataFormatString = "{0:dd MMM yyyy}")]
+        [DataType(DataType.Date)]
         public System.DateTime? AccountCreationDate { get; set; }
         public virtual IList<Review> Reviews { get; set; }
 

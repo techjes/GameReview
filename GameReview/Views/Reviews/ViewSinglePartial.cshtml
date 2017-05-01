@@ -1,0 +1,21 @@
+﻿@model GameReview.Models.Review
+<h2>Your Review</h2>
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title navbar-header">@Model.UserName</h3>
+        <h3 class="panel-title text-right">@Model.DateCreated</h3>
+    </div>
+    <div class="panel-body">
+        @Model.Content
+    </div>
+    <div class="panel-footer">
+        Was this review Helpful?
+        <button type="button" class="btn btn-default">
+            <span class="glyphicon glyphicon-thumbs-up"></span> @Model.HelpfulCount
+        </button>
+        <button type="button" class="btn btn-default">
+            <span class="glyphicon glyphicon-thumbs-up"></span> @Model.NotHelpfulCount
+        </button>
+        <button type="button" class="btn btn-default pull-right"><span class="glyphicon glyphicon-edit"></span></button>
+    </div>
+</div>

@@ -15,8 +15,7 @@
 </head>
 <body>
     <div id="wrapper">
-        @if (Request.IsAuthenticated)
-        {
+
             <div class="navbar navbar-default navbar-fixed-top">
                 <div class="container-fluid">
                     <div class="navbar-header">
@@ -40,7 +39,7 @@
                 <li>@Html.ActionLink("Recent Reviews", "Index", "Home")</li>
             </ul>
         </div>
-        }
+        
         <div id="page-content-wrapper">
             <div class="container-fluid body-content">
                 @RenderBody()

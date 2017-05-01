@@ -4,6 +4,7 @@ using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using GameReview.Models;
@@ -141,6 +142,29 @@ namespace GameReview.Controllers
             db.Reviews.Remove(review);
             db.SaveChanges();
             return RedirectToAction("Index");
+        }
+
+        public async Task<ActionResult> ViewSinglePartial(int id)
+        {
+            return PartialView(await db.Reviews.FindAsync(id));
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> EditPartial(int id)
+        {
+            var review = await db.Reviews.FindAsync(id);
+
+            return PartialView(review);
+        }
+
+        [ValidateAntiForgeryToken]
+        [HttpPost]
+        public async Task<ActionResult> EditPartial([Bind(Include ="ID,Content,DateCreated,Recommended,HelpfulCount,NotHelpfulCount,UserName")]Review review)
+        {
+            db.Entry(review).State = EntityState.Modified;
+            await db.SaveChangesAsync();
+
+            return RedirectToAction("ViewSinglePartial", new { id = review.ID});
         }
 
         protected override void Dispose(bool disposing)

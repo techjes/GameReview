@@ -1,0 +1,22 @@
+﻿@model GameReview.Models.Review
+<h2>Your Review</h2>
+<div class="this">
+    @Ajax.BeginForm("EditPartial", "Reviews", new AjaxOptions() { UpdateTargetId = "this", HttpMethod = "Post" })
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <input type="hidden" name="ID" value="@Model.ID" readonly/>
+            <input type="text" name="UserName" value="@Model.UserName" class="h3" readonly/>
+            <input type="text" name="UserName" value="@Model.DateCreated" class="h3" readonly />
+        </div>
+        <div class="panel-body">
+            <input type="text" name="Content" value="@Model.Content" />
+        </div>
+        <div class="panel-footer">
+            <input type="hidden" name="Recommended" value="@Model.Recommended"  readonly/>
+                <input type="hidden" name="HelpfulCount" value="@Model.HelpfulCount" readonly/>
+                <input type="hidden" name="HelpfulCount" value="@Model.NotHelpfulCount" readonly />
+            <input type="submit" name="submit" value="Submit Changes" />
+        </div>
+    </div>
+</div>
+

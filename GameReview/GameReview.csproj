@@ -34,6 +34,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <IncludeIisSettings>true</IncludeIisSettings>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -277,6 +278,7 @@
     <Content Include="Content\jquery.fancybox.css" />
     <Content Include="Content\PagedList.css" />
     <Content Include="Content\simple-sidebar.css" />
+    <Content Include="Content\slate.bootstrap.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -285,6 +287,7 @@
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Models\ClassDiagram1.cd" />
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
+    <None Include="Properties\PublishProfiles\GameReview218 - Web Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\GameReviewCIT218 - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
@@ -373,6 +376,8 @@
     <Content Include="Views\Moderator\Delete.cshtml" />
     <Content Include="Views\Home\ReviewsByUser.cshtml" />
     <Content Include="Views\Games\FavoriteButton.cshtml" />
+    <Content Include="Views\Reviews\EditPartial.cshtml" />
+    <Content Include="Views\Reviews\ViewSinglePartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

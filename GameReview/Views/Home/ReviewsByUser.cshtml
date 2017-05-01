@@ -14,28 +14,31 @@
             <div class="col-md-4">
             @if (item.Recommended)
             {
-            <div class="panel panel-success">
-                <div class="panel-heading">
-                    <h3 class="panel-title">@Html.DisplayFor(modelItem => item.UserName)</h3>
-                    <h3 class="panel-title text-right">@Html.DisplayFor(modelItem => item.DateCreated)</h3>
+                <div id="@item.ID" class="clickable">
+                    <div class="panel panel-success">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">@Html.DisplayFor(modelItem => item.UserName)</h3>
+                            <h3 class="panel-title text-right">@Html.DisplayFor(modelItem => item.DateCreated)</h3>
+                        </div>
+                        <div class="panel-body">
+                            @Html.DisplayFor(modelItem => item.Content)
+                        </div>
+                    </div>
                 </div>
-                <div class="panel-body">
-                    @Html.DisplayFor(modelItem => item.Content)
-                </div>
-
-            </div>
             }
             else
             {
-            <div class="panel panel-danger">
-                <div class="panel-heading">
-                    <h3 class="panel-title">@Html.DisplayFor(modelItem => item.UserName)</h3>
-                    <h3 class="panel-title text-right">@Html.DisplayFor(modelItem => item.DateCreated)</h3>
+                <div id="@item.ID" class="clickable">
+                    <div class="panel panel-danger">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">@Html.DisplayFor(modelItem => item.UserName)</h3>
+                            <h3 class="panel-title text-right">@Html.DisplayFor(modelItem => item.DateCreated)</h3>
+                        </div>
+                        <div class="panel-body">
+                            @Html.DisplayFor(modelItem => item.Content)
+                        </div>
+                    </div>
                 </div>
-                <div class="panel-body">
-                    @Html.DisplayFor(modelItem => item.Content)
-                </div>
-            </div>
             }
         </div>
         }

@@ -22,10 +22,19 @@ namespace GameReview.Controllers
                 db.Entry(user).Collection(x => x.Reviews).Load();
                 db.Entry(user).Collection(x => x.Favorites).Load();
             }
-            user.Reviews.OrderBy(x => x.DateCreated);
-            user.Favorites.OrderBy(x => x.GameTitle);          
+            UserViewModel model = new UserViewModel(user);
+            if (user.Reviews.Count() > 0)
+            {
+                ViewBag.Reviews = user.Reviews.OrderBy(x => x.DateCreated).ToList()[0];
 
-            return View(user);
+            }
+            if (user.Favorites.Count >0)
+            {
+                ViewBag.Favorites = user.Favorites.OrderBy(x => x.GameTitle);
+
+            }
+
+            return View(model);
         }
 
         public ActionResult ReviewsByUser()
